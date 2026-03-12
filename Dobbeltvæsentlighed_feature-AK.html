@@ -1,1 +1,293 @@
-<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Dobbelt Væsentlighedsanalyse Matrix Tool</title>\n    <style>\n        body {\n            font-family: Arial, sans-serif;\n            margin: 20px;\n        }\n        .matrix {\n            width: 600px;\n            height: 600px;\n            border: 1px solid #000;\n            position: relative;\n            background-color: #f9f9f9;\n        }\n        .point {\n            width: 10px;\n            height: 10px;\n            position: absolute;\n            border-radius: 50%;\n        }\n        .environmental {\n            background-color: green;\n        }\n        .social {\n            background-color: red;\n        }\n        .governance {\n            background-color: blue;\n        }\n    </style>\n</head>\n<body>\n    <h1>Dobbelt Væsentlighedsanalyse Matrix Tool</h1>\n    <div class=\"matrix\" id=\"matrix\">\n        <div class=\"point environmental\" id=\"point1\"></div>\n        <div class=\"point social\" id=\"point2\"></div>\n        <div class=\"point governance\" id=\"point3\"></div>\n    </div>\n    <script>\n        // Make points draggable\n        function makeDraggable(element) {\n            element.onmousedown = function(event) {\n                let shiftX = event.clientX - element.getBoundingClientRect().left;\n                let shiftY = event.clientY - element.getBoundingClientRect().top;\n                element.style.position = 'absolute';\n                moveAt(event.pageX, event.pageY);\n                document.body.append(element);\n                element.namedItem = 'draggable';\n                function moveAt(pageX, pageY) {\n                    element.style.left = pageX - shiftX + 'px';\n                    element.style.top = pageY - shiftY + 'px';\n                }\n                function onMouseMove(event) {\n                    moveAt(event.pageX, event.pageY);\n                }\n                document.addEventListener('mousemove', onMouseMove);\n                element.onmouseup = function() {\n                    document.removeEventListener('mousemove', onMouseMove);\n                    element.onmouseup = null;\n                };\n            };\n            element.ondragstart = function() {\n                return false;\n            };\n        }\n        // Apply draggable feature to all points\n        let points = document.querySelectorAll('.point');\n        points.forEach(point => makeDraggable(point));\n        // Save positions to local storage\n        function savePositions() {\n            let positions = [];\n            points.forEach(point => {\n                let rect = point.getBoundingClientRect();\n                positions.push({\n                    id: point.id,\n                    left: rect.left,\n                    top: rect.top\n                });\n            });\n            localStorage.setItem('matrixPositions', JSON.stringify(positions));\n        }\n        // Restore positions from local storage\n        function restorePositions() {\n            let positions = JSON.parse(localStorage.getItem('matrixPositions'));\n            if (positions) {\n                positions.forEach(pos => {\n                    let point = document.getElementById(pos.id);\n                    point.style.left = pos.left + 'px';\n                    point.style.top = pos.top + 'px';\n                });\n            }\n        }\n        restorePositions();\n        window.addEventListener('beforeunload', savePositions);\n    </script>\n</body>\n</html>\n
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<title>Dobbelt væsentlighedsanalyse – ALBOA</title>
+
+<style>
+
+body{
+font-family:system-ui;
+background:#f4f7fb;
+padding:40px;
+}
+
+h1{
+text-align:center;
+}
+
+button{
+display:block;
+margin:20px auto;
+padding:10px 18px;
+border:none;
+background:#2563eb;
+color:white;
+border-radius:8px;
+cursor:pointer;
+}
+
+.matrix{
+position:relative;
+width:1100px;
+height:650px;
+margin:auto;
+background:white;
+border-radius:16px;
+box-shadow:0 20px 50px rgba(0,0,0,0.1);
+}
+
+.matrix::before{
+content:"";
+position:absolute;
+left:50%;
+width:2px;
+height:100%;ackground:#d1d5db;
+}
+
+.matrix::after{
+content:"";
+position:absolute;
+top:50%;
+height:2px;
+width:100%;ackground:#d1d5db;
+}
+
+.axisX{
+text-align:center;
+margin-top:10px;
+font-weight:600;
+}
+
+.axisY{
+position:absolute;
+left:-120px;
+top:50%;	ransform:rotate(-90deg);
+font-weight:600;
+}
+
+.point{
+position:absolute;
+padding:10px 14px;
+border-radius:10px;
+color:white;
+font-size:13px;
+cursor:pointer;
+transform:translate(-50%,-50%);
+}
+
+.env{background:#22c55e;}
+.social{background:#ef4444;}
+.gov{background:#2563eb;}
+
+.infoPanel{
+max-width:1100px;
+margin:30px auto;ackground:white;
+padding:20px;
+border-radius:12px;
+box-shadow:0 8px 20px rgba(0,0,0,0.08);
+}
+
+.priorityContainer{
+max-width:1100px;
+margin:40px auto;
+display:flex;
+gap:20px;
+}
+
+.priorityBox{
+flex:1;
+background:white;
+padding:20px;
+border-radius:12px;
+min-height:200px;
+box-shadow:0 6px 15px rgba(0,0,0,0.08);
+}
+
+.priorityItem{
+padding:8px 10px;
+border-radius:6px;
+margin:6px 0;ackground:#e5e7eb;
+cursor:pointer;
+}
+
+.high{border-top:5px solid #ef4444;}
+.medium{border-top:5px solid #f59e0b;}
+.low{border-top:5px solid #22c55e;}
+
+</style>
+</head>
+
+<body>
+
+<h1>Dobbelt væsentlighedsanalyse – ALBOA</h1>
+
+<button onclick="savePositions()">Gem analyse</button>
+
+<div class="matrix">
+
+<div class="axisY">Risiko ved ikke at gøre noget</div>
+
+<div class="point env" style="left:85%;top:20%">Klimaftryk</div>
+<div class="point env" style="left:88%;top:22%">Energiforbrug</div>
+<div class="point env" style="left:92%;top:25%">Affald</div>
+<div class="point env" style="left:55%;top:35%">Sårbarhed for klimaændringer</div>
+<div class="point env" style="left:48%;top:60%">Biodiversitet</div>
+<div class="point env" style="left:22%;top:80%">Energimærkning</div>
+
+<div class="point social" style="left:20%;top:50%">Adgang til services</div>
+<div class="point social" style="left:30%;top:75%">Andel af almene boliger</div>
+
+<div class="point gov" style="left:40%;top:80%">Frivillighed</div>
+
+<div class="point social" style="left:80%;top:40%">Livskvalitet og sundhed</div>
+<div class="point social" style="left:82%;top:42%">Medarbejdertrivsel</div>
+<div class="point social" style="left:88%;top:40%">Livschancer</div>
+<div class="point social" style="left:90%;top:55%">Lokalt fællesskab</div>
+<div class="point social" style="left:75%;top:60%">Almene boligers betalbarhed</div>
+<div class="point social" style="left:75%;top:65%">Medarbejdersammensætning</div>
+
+<div class="point gov" style="left:90%;top:15%">God økonomistyring</div>
+<div class="point gov" style="left:92%;top:60%">Politikker og praksis</div>
+<div class="point gov" style="left:52%;top:45%">Overholdelse af regulering</div>
+<div class="point gov" style="left:50%;top:80%">Sociale klausuler</div>
+
+</div>
+
+<div class="axisX">Værdiskabelse i ALBOA</div>
+
+<div class="infoPanel" id="infoPanel">
+<h3>Klik på et målepunkt</h3>
+<p>Beskrivelse vises her.</p>
+</div>
+
+<h2 style="text-align:center">Prioritering</h2>
+
+<div class="priorityContainer">
+
+<div class="priorityBox high" id="high">
+<h3>Høj prioritet</h3>
+</div>
+
+<div class="priorityBox medium" id="medium">
+<h3>Mellem prioritet</h3>
+</div>
+
+<div class="priorityBox low" id="low">
+<h3>Lav prioritet</h3>
+</div>
+
+</div>
+
+<script>
+
+const descriptions={
+"Klimaftryk":"CO2 udledning fra drift og byggeri.",
+"Energiforbrug":"Effektiv brug af energi.",
+"Affald":"Affaldshåndtering.",
+"Biodiversitet":"Natur og grønne områder.",
+"Sårbarhed for klimaændringer":"Risici fra klimaforandringer.",
+"Energimærkning":"Bygningers energieffektivitet.",
+"Adgang til services":"Adgang til transport og service.",
+"Andel af almene boliger":"Tilgængelighed af boliger.",
+"Frivillighed":"Beboerengagement i aktiviteter.",
+"Livskvalitet og sundhed":"Beboernes trivsel.",
+"Medarbejdertrivsel":"Ansattes trivsel.",
+"Livschancer":"Beboernes muligheder.",
+"Lokalt fællesskab":"Social sammenhængskraft.",
+"Almene boligers betalbarhed":"Boligernes prisniveau.",
+"Medarbejdersammensætning":"Mangfoldighed blandt ansatte.",
+"God økonomistyring":"Ansvarlig økonomistyring.",
+"Politikker og praksis":"Governance-politikker.",
+"Overholdelse af regulering":"Lovgivning overholdes.",
+"Sociale klausuler":"Sociale krav i kontrakter."
+}
+
+const points=document.querySelectorAll(".point")
+
+points.forEach(p=>{
+p.addEventListener("click",()=>{
+let name=p.innerText
+document.getElementById("infoPanel").innerHTML=
+"<h3>"+name+"</h3><p>"+descriptions[name]+"</p>"
+})
+})
+
+function updatePriorities(){
+
+document.getElementById("high").innerHTML="<h3>Høj prioritet</h3>"
+document.getElementById("medium").innerHTML="<h3>Mellem prioritet</h3>"
+document.getElementById("low").innerHTML="<h3>Lav prioritet</h3>"
+
+points.forEach(p=>{
+
+let x=parseFloat(p.style.left)||0
+let y=parseFloat(p.style.top)||0
+
+let target="low"
+
+if(x>60 && y<40) target="high"
+else if(x>35 && y<65) target="medium"
+
+let item=document.createElement("div")
+item.className="priorityItem"
+item.innerText=p.innerText
+
+item.onclick=()=>{
+document.getElementById("infoPanel").innerHTML=
+"<h3>"+p.innerText+"</h3><p>"+descriptions[p.innerText]+"</p>"
+}
+
+document.getElementById(target).appendChild(item)
+
+})
+
+}
+
+points.forEach(point=>{
+
+point.addEventListener("mousedown",e=>{
+
+function move(e){
+
+const rect=document.querySelector(".matrix").getBoundingClientRect()
+
+let x=e.clientX-rect.left
+let y=e.clientY-rect.top
+
+point.style.left=(x/rect.width*100)+"%"
+point.style.top=(y/rect.height*100)+"%"
+
+}
+
+function stop(){
+document.removeEventListener("mousemove",move)
+document.removeEventListener("mouseup",stop)
+updatePriorities()
+}
+
+document.addEventListener("mousemove",move)
+document.addEventListener("mouseup",stop)
+
+})
+
+})
+
+function savePositions(){
+
+const data=[...points].map(p=>({
+name:p.innerText,
+left:p.style.left,
+top:p.style.top
+}))
+
+localStorage.setItem("matrixPositions",JSON.stringify(data))
+alert("Analyse gemt")
+}
+
+updatePriorities()
+
+</script>
+
+</body>
+</html>
