@@ -212,19 +212,13 @@ const descriptions={
 
 const points=document.querySelectorAll(".point")
 
-points.forEach(p=>{
-p.addEventListener("click",()=>{
-let name=p.innerText
-document.getElementById("infoPanel").innerHTML=
-"<h3>"+name+"</h3><p>"+descriptions[name]+"</p>"
-})
-})
-
 /* LOAD GEMTE POSITIONER */
 
-const saved = JSON.parse(localStorage.getItem("matrixPositions"))
+function loadPositions(){
 
-if(saved){
+const saved=JSON.parse(localStorage.getItem("matrixPositions"))
+
+if(!saved) return
 
 saved.forEach(data=>{
 
@@ -239,9 +233,19 @@ p.style.top=data.top
 
 }
 
-/* OPDATER PRIORITERING EFTER LOAD */
+/* VIS BESKRIVELSE */
 
-updatePriorities()
+points.forEach(p=>{
+p.addEventListener("click",()=>{
+let name=p.innerText
+
+document.getElementById("infoPanel").innerHTML=
+"<h3>"+name+"</h3><p>"+descriptions[name]+"</p>"
+})
+})
+
+/* PRIORITERING */
+
 function updatePriorities(){
 
 document.getElementById("high").innerHTML="<h3>Høj prioritet</h3>"
@@ -273,6 +277,8 @@ document.getElementById(target).appendChild(item)
 
 }
 
+/* DRAG */
+
 points.forEach(point=>{
 
 point.addEventListener("mousedown",e=>{
@@ -290,9 +296,12 @@ point.style.top=(y/rect.height*100)+"%"
 }
 
 function stop(){
+
 document.removeEventListener("mousemove",move)
 document.removeEventListener("mouseup",stop)
+
 updatePriorities()
+
 }
 
 document.addEventListener("mousemove",move)
@@ -301,6 +310,8 @@ document.addEventListener("mouseup",stop)
 })
 
 })
+
+/* GEM */
 
 function savePositions(){
 
@@ -311,10 +322,14 @@ top:p.style.top
 }))
 
 localStorage.setItem("matrixPositions",JSON.stringify(data))
+
 alert("Analyse gemt")
 
 }
 
+/* INITIAL LOAD */
+
+loadPositions()
 updatePriorities()
 
 </script>
