@@ -42,7 +42,8 @@ content:"";
 position:absolute;
 left:50%;
 width:2px;
-height:100%;ackground:#d1d5db;
+height:100%;
+background:#d1d5db;
 }
 
 .matrix::after{
@@ -50,7 +51,8 @@ content:"";
 position:absolute;
 top:50%;
 height:2px;
-width:100%;ackground:#d1d5db;
+width:100%;
+background:#d1d5db;
 }
 
 .axisX{
@@ -62,7 +64,8 @@ font-weight:600;
 .axisY{
 position:absolute;
 left:-120px;
-top:50%;	ransform:rotate(-90deg);
+top:50%;
+transform:rotate(-90deg);
 font-weight:600;
 }
 
@@ -82,7 +85,8 @@ transform:translate(-50%,-50%);
 
 .infoPanel{
 max-width:1100px;
-margin:30px auto;ackground:white;
+margin:30px auto;
+background:white;
 padding:20px;
 border-radius:12px;
 box-shadow:0 8px 20px rgba(0,0,0,0.08);
@@ -107,7 +111,8 @@ box-shadow:0 6px 15px rgba(0,0,0,0.08);
 .priorityItem{
 padding:8px 10px;
 border-radius:6px;
-margin:6px 0;ackground:#e5e7eb;
+margin:6px 0;
+background:#e5e7eb;
 cursor:pointer;
 }
 
@@ -148,6 +153,7 @@ cursor:pointer;
 <div class="point social" style="left:75%;top:65%">Medarbejdersammensætning</div>
 
 <div class="point gov" style="left:90%;top:15%">God økonomistyring</div>
+<div class="point gov" style="left:90%;top:15%">Beboerdemokrati</div>
 <div class="point gov" style="left:92%;top:60%">Politikker og praksis</div>
 <div class="point gov" style="left:52%;top:45%">Overholdelse af regulering</div>
 <div class="point gov" style="left:50%;top:80%">Sociale klausuler</div>
@@ -185,6 +191,7 @@ const descriptions={
 "Klimaftryk":"CO2 udledning fra drift og byggeri.",
 "Energiforbrug":"Effektiv brug af energi.",
 "Affald":"Affaldshåndtering.",
+"Beboerdemokrati":"Beboerens medindflydelse, tillid og involvering.",
 "Biodiversitet":"Natur og grønne områder.",
 "Sårbarhed for klimaændringer":"Risici fra klimaforandringer.",
 "Energimærkning":"Bygningers energieffektivitet.",
@@ -283,6 +290,7 @@ top:p.style.top
 
 localStorage.setItem("matrixPositions",JSON.stringify(data))
 alert("Analyse gemt")
+
 }
 
 updatePriorities()
