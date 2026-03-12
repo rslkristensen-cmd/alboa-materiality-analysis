@@ -220,6 +220,28 @@ document.getElementById("infoPanel").innerHTML=
 })
 })
 
+/* LOAD GEMTE POSITIONER */
+
+const saved = JSON.parse(localStorage.getItem("matrixPositions"))
+
+if(saved){
+
+saved.forEach(data=>{
+
+const p=[...points].find(el=>el.innerText===data.name)
+
+if(p){
+p.style.left=data.left
+p.style.top=data.top
+}
+
+})
+
+}
+
+/* OPDATER PRIORITERING EFTER LOAD */
+
+updatePriorities()
 function updatePriorities(){
 
 document.getElementById("high").innerHTML="<h3>Høj prioritet</h3>"
